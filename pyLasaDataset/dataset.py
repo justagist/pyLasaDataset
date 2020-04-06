@@ -49,7 +49,8 @@ class _Data(object):
         demos : array of _Demo objects (len: 7) corresponding the trials for this pattern
 
     """
-    def __init__(self, matdata):
+    def __init__(self, matdata, name):
+        self.name = name
         self.dt = matdata['dt'][0][0]
         self.demos = [_Demo(d) for d in matdata['demos'][0]]
 
@@ -60,7 +61,7 @@ class _Data(object):
 
     @classmethod
     def get_data(cls, name):
-        return cls(loadmat("{}/{}.mat".format(DATASET_PATH_,name)))
+        return cls(loadmat("{}/{}.mat".format(DATASET_PATH_,name)), name)
 
 
 class _PyLasaDataSet(object):
