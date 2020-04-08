@@ -71,15 +71,10 @@ class _PyLasaDataSet(object):
             return _Data.get_data(name)
         else:
             raise AttributeError("DataSet has no data named '{}'".format(name))
-            # print name
 
 
 DataSet = _PyLasaDataSet()
 
 if __name__ == '__main__':
-    # DataSet
-    # print "nod"
-    DataSet
     a = DataSet.Angle
     b = DataSet.BendedLine
-    # print "shit"
