@@ -1,15 +1,14 @@
 # PyLasaDataset
 
-[LASA Handwriting dataset](https://bitbucket.org/khansari/lasahandwritingdataset) loader and other tools for Python 2
+[LASA Handwriting dataset](https://bitbucket.org/khansari/lasahandwritingdataset) loader and other tools for Python 2 and Python 3.
 
+## Installation
 
-### Installation 
-
-Run `python setup.py install`. 
+- Dependencies: `apt install python-tk`; `pip install numpy scipy matplotlib`.
+- Run `python setup.py install`.
 NB: This will clone the original dataset.
 
-
-### Usage
+## Usage
 
 ```python
 

@@ -1,3 +1,3 @@
 
 from .dataset import DataSet
-import utilities
+from . import utilities

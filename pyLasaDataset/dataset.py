@@ -2,17 +2,12 @@ import os
 import numpy as np
 from scipy.io import loadmat
 
-NAMES_ = ['Angle','BendedLine','CShape','DoubleBendedLine','GShape',
-         'heee','JShape','JShape_2','Khamesh','Leaf_1',
-         'Leaf_2','Line','LShape','NShape','PShape',
-         'RShape','Saeghe','Sharpc','Sine','Snake',
-         'Spoon','Sshape','Trapezoid','Worm','WShape','Zshape',
-         'Multi_Models_1','Multi_Models_2','Multi_Models_3','Multi_Models_4']
-
 DATASET_PATH_ = os.path.dirname(os.path.abspath(__file__)) + "/resources/LASAHandwritingDataset/DataSet"
 
+NAMES_ = [f[:-4] for f in os.listdir(DATASET_PATH_) if f[-4:] == ".mat"]
+
 if os.path.isdir(DATASET_PATH_):
-    print "Using LASA DataSet from {}".format(DATASET_PATH_)
+    print ("Using LASA DataSet from {}".format(DATASET_PATH_))
 else:
     raise IOError("Could not find LASA Dataset in path: {}".format(DATASET_PATH_))
 
