@@ -1,4 +1,4 @@
-# PyLasaDataset
+# PyLasaDataset [![PyPI](https://img.shields.io/pypi/v/pylasadataset?color=blue)](https://pypi.org/project/pylasadataset/)
 
 [LASA Handwriting dataset](https://bitbucket.org/khansari/lasahandwritingdataset) loader and other tools for Python 2 and Python 3.
 
@@ -6,15 +6,17 @@
 
 ### Via pip
 
+`python3 -m pip install pylasadataset`
+
+Or 
+
 `python3 -m pip install git+https://github.com/justagist/pylasadataset`
 
-NB: This will download the original dataset into the install path.
 
 ### Manual Install
 
 - Dependencies: `apt install python-tk`; `pip install numpy scipy matplotlib`.
 - Run `python setup.py install`.
-NB: This will clone the original dataset.
 
 ## Usage
 
@@ -46,7 +48,7 @@ acc = demo_0.acc # np.ndarray, shape: (2,2000)
 t = demo_0.t # np.ndarray, shape: (1,2000)
 
 
-# To visualise the model use the plot_model utility
+# To visualise the data (2D position and velocity) use the plot_model utility
 lasa.utilities.plot_model(lasa.DataSet.BendedLine) # give any of the available 
                                                    # pattern data as argument
 

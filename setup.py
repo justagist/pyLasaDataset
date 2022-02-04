@@ -4,7 +4,6 @@ import os, subprocess
 from setuptools import setup, find_packages
 from distutils.core import setup
 
-# print "THIS\n\n"
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
@@ -30,21 +29,26 @@ clone_repo()
 setup(
     name = "pyLasaDataset",
     version = "0.1.1",
-    author = "JustaGist",
+    author = "Saif Sidhik",
     author_email = "mail@saifsidhik.page",
-    description = ("Simulation environments and experiments for comparing different variable impedance control strategies used for robot manipulation."),
-    license = "Apache 2.0",
+    description = ("LASA Handwriting dataset loader and other tools for Python."),
+    long_description_content_type="text/markdown",
+    long_description=read("README.md"),
+    license = "Public Domain",
     keywords = "handwriting dataset, python",
     url = "https://github.com/justagist/pyLasaDataset",
+    project_urls = {
+        "Bug Tracker": "https://github.com/justagist/pylasadataset/issues",
+        "Documentation": "https://github.com/justagist/pyLasaDataset/blob/master/README.md",
+        "Source Code": "https://github.com/justagist/pylasadataset",
+    },
+    classifiers=[
+        "License :: Public Domain",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
     packages=find_packages(),
     install_requires=[
        'scipy', 'numpy', 'matplotlib'
       ],
-    long_description=read('README.md'),
-    classifiers=[],
     include_package_data=True,
-    #     "Development Status :: 3 - Alpha",
-    #     "Topic :: Utilities",
-    #     "License :: OSI Approved :: BSD License",
-    # ],
 )
