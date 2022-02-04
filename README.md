@@ -4,6 +4,14 @@
 
 ## Installation
 
+### Via pip
+
+`python3 -m pip install git+https://github.com/justagist/pylasadataset`
+
+NB: This will download the original dataset into the install path.
+
+### Manual Install
+
 - Dependencies: `apt install python-tk`; `pip install numpy scipy matplotlib`.
 - Run `python setup.py install`.
 NB: This will clone the original dataset.
