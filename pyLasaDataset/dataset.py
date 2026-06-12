@@ -9,6 +9,7 @@ locally (default: ``~/.cache/pyLasaDataset``; override with the
 import io
 import os
 import shutil
+import subprocess
 import time
 import zipfile
 from functools import lru_cache
@@ -41,33 +42,34 @@ def _default_cache_dir():
     return os.path.join(xdg_cache, "pyLasaDataset")
 
 
-def _download_dataset(target_dir):
-    """Download the dataset zip from GitHub and extract the .mat files."""
-    print(
-        "pyLasaDataset: downloading LASA Handwriting Dataset from {} ...".format(
-            DATASET_URL
-        )
-    )
-    attempts = 3
-    for attempt in range(1, attempts + 1):
-        try:
-            with urlopen(DATASET_URL) as response:
-                archive = io.BytesIO(response.read())
-            break
-        except Exception as exc:
-            if attempt == attempts:
-                raise IOError(
-                    "Failed to download LASA dataset from {} after {} "
-                    "attempts: {}".format(DATASET_URL, attempts, exc)
-                )
-            print(
-                "pyLasaDataset: download failed ({}), retrying ({}/{})...".format(
-                    exc, attempt, attempts
-                )
-            )
-            time.sleep(2 * attempt)
+def _fetch_with_urllib():
+    """Download the dataset zip into memory using urllib."""
+    with urlopen(DATASET_URL, timeout=30) as response:
+        return io.BytesIO(response.read())
 
-    tmp_dir = target_dir + ".tmp"
+
+def _fetch_with_curl():
+    """Download the dataset zip using the curl binary.
+
+    Some networks kill transfers from clients with a Python TLS fingerprint
+    while letting curl through, so this is the fallback when urllib fails.
+    """
+    if shutil.which("curl") is None:
+        raise IOError("curl is not available on this system")
+    result = subprocess.run(
+        ["curl", "-fsSL", DATASET_URL], capture_output=True, check=False
+    )
+    if result.returncode != 0:
+        raise IOError(
+            "curl exited with code {}: {}".format(
+                result.returncode, result.stderr.decode(errors="replace").strip()
+            )
+        )
+    return io.BytesIO(result.stdout)
+
+
+def _extract_mats(archive, tmp_dir):
+    """Extract the .mat files from the archive into tmp_dir."""
     if os.path.isdir(tmp_dir):
         shutil.rmtree(tmp_dir)
     os.makedirs(tmp_dir)
@@ -81,14 +83,48 @@ def _download_dataset(target_dir):
                     open(os.path.join(tmp_dir, parts[2]), "wb") as dst,
                 ):
                     shutil.copyfileobj(src, dst)
-
     if not any(f.endswith(".mat") for f in os.listdir(tmp_dir)):
-        shutil.rmtree(tmp_dir)
-        raise IOError(
-            "Downloaded archive from {} did not contain any .mat files.".format(
-                DATASET_URL
-            )
+        raise IOError("downloaded archive contained no .mat files")
+
+
+def _download_dataset(target_dir):
+    """Download the dataset zip from GitHub and extract the .mat files."""
+    print(
+        "pyLasaDataset: downloading LASA Handwriting Dataset from {} ...".format(
+            DATASET_URL
         )
+    )
+    tmp_dir = target_dir + ".tmp"
+    attempts = [
+        ("urllib", _fetch_with_urllib),
+        ("urllib", _fetch_with_urllib),
+        ("urllib", _fetch_with_urllib),
+        # fallback to curl after 3 failed attempts with urllib, since some networks are unfriendly to Python TLS
+        # fingerprints
+        ("curl", _fetch_with_curl),
+    ]
+    for i, (label, fetch) in enumerate(attempts):
+        try:
+            _extract_mats(fetch(), tmp_dir)
+            break
+        except Exception as exc:
+            if i == len(attempts) - 1:
+                raise IOError(
+                    "Failed to download LASA dataset from {url}: {err}\n"
+                    "You can download it manually instead:\n"
+                    "  mkdir -p {target}\n"
+                    "  cd /tmp && curl -LO {url}\n"
+                    "  unzip -j master.zip "
+                    "'LASAHandwritingDataset-master/DataSet/*.mat' "
+                    "-d {target}".format(url=DATASET_URL, err=exc, target=target_dir)
+                )
+            print(
+                "pyLasaDataset: download via {} failed ({}), retrying via {}...".format(
+                    label, exc, attempts[i + 1][0]
+                )
+            )
+            time.sleep(2)
+
     # Atomic-ish swap so an interrupted download never leaves a half-filled
     # directory behind to be mistaken for a valid cache.
     if os.path.isdir(target_dir):

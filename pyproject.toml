@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyLasaDataset"
-version = "0.2.0"
+version = "0.2.1"
 description = "LASA Handwriting dataset loader and other tools for Python."
 readme = "README.md"
 license = { text = "Public Domain" }
