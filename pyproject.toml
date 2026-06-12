@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyLasaDataset"
+version = "0.2.0"
+description = "LASA Handwriting dataset loader and other tools for Python."
+readme = "README.md"
+license = { text = "Public Domain" }
+requires-python = ">=3.9"
+authors = [{ name = "Saif Sidhik", email = "mail@saifsidhik.page" }]
+keywords = [
+    "handwriting dataset",
+    "LASA",
+    "learning from demonstration",
+    "python",
+]
+classifiers = [
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = ["numpy", "scipy", "matplotlib"]
+
+[project.urls]
+Homepage = "https://github.com/justagist/pyLasaDataset"
+"Bug Tracker" = "https://github.com/justagist/pyLasaDataset/issues"
+Documentation = "https://github.com/justagist/pyLasaDataset/blob/master/README.md"
+"Source Code" = "https://github.com/justagist/pyLasaDataset"
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["pyLasaDataset*"]

@@ -1,4 +1,0 @@
-include MANIFEST.in
-include README
-include setup.py
-recursive-include pyLasaDataset/resources/LASAHandwritingDataset/DataSet *.mat

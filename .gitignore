@@ -1,19 +1,19 @@
 # Compiled python modules.
 *.pyc
+__pycache__/
 
-# *.pkl
-
-# Setuptools distribution folder.
+# Packaging artifacts.
 /dist/
-
-# Python egg metadata, regenerated from source files by setuptools.
-/*.egg-info
-
 /build/
+*.egg-info/
 
-pyLasaDataset/resources/*
+# Legacy bundled-dataset location (pyLasaDataset <= 0.1.x).
+pyLasaDataset/resources/
 
-/__pycache__/
+# Tool caches.
+.pytest_cache/
+.ruff_cache/
 
-
-
+# Virtual environments.
+.venv/
+venv/
